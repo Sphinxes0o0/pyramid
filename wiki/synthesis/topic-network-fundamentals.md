@@ -2,7 +2,7 @@
 type: synthesis
 tags: [计算机网络, 课程, TCPIP, UDP, HTTP, DNS, 网络安全]
 created: 2026-05-20
-sources: [github-sphinxes0o0-notes-network_fundamentals]
+sources: [notes-overview-network_fundamentals]
 ---
 
 # 计算机网络基础 (Network Fundamentals)

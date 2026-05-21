@@ -2,7 +2,7 @@
 type: synthesis
 tags: [操作系统, 课程, 进程, 内存管理, 文件系统, 网络, 并发]
 created: 2026-05-20
-sources: [github-sphinxes0o0-notes-os_fundamentals]
+sources: [notes-overview-os_fundamentals]
 ---
 
 # 操作系统基础 (OS Fundamentals)
