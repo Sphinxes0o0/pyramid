@@ -1,0 +1,2 @@
+raw/github/** filter=lfs diff=lfs merge=lfs -text
+raw/PDFs/** filter=lfs diff=lfs merge=lfs -text
