@@ -1,0 +1,125 @@
+# Log — LLM Wiki 操作日志
+
+> Append-only。格式：`## [YYYY-MM-DD] action | detail`
+
+---
+
+## [2026-05-20] init | Initialized llm-wiki structure
+
+- 创建目录结构
+- 创建 AGENT.md（维护手册）
+## [2026-05-20] ingest | PDFs from ~/Documents
+
+- 移动 58 个 PDF → `raw/PDFs/`
+- 分类归档：books(3) + papers(10) + slides(37)，去重 7 本（已在 books/）
+- 更新 AGENT.md：`docs` → `slides`
+- 当前总计：books(61) + papers(10) + slides(37) = 108 PDFs
+
+## [2026-05-20] ingest | relay-neuron-exercise-physiology
+
+**来源**: raw/github/relay-neuron/research/exercise-physiology/ (25 .md files)
+**操作**:
+- 创建 10 个 entity 页面: muscle-hypertrophy, mtor-pathway, mps-muscle-protein-synthesis, vo2max, lactate-threshold, bfr-training, concurrent-training, training-frequency, fatigue-recovery, satellite-cells
+- 创建 1 个 source 页面: github-relay-neuron-exercise-physiology
+- 更新 wiki/index.md
+
+**核心概念**: 肌肥大三大机制 (Schoenfeld), mTOR 通路, MPS, BFR训练, 并发训练协调效应, VO2max/乳酸阈值训练
+
+## [2026-05-20] ingest | notes/qemu + notes/os + notes/os_fundamentals
+
+**来源**: raw/github/notes/qemu/ (5 deep-dive files), raw/github/notes/os/ (4 deep-dive files), raw/github/notes/os_fundamentals/ (39 lectures)
+
+**操作**:
+- 创建 5 个 QEMU entity 页面: qemu-qom, qemu-memory, qemu-cpu, qemu-block-layer, qemu-migration
+- 创建 7 个 OS entity 页面: linux-vfs, linux-scheduler, linux-memory-allocator, linux-cgroups, os-io-model, os-process-thread, os-virtual-memory
+- 更新 wiki/index.md
+
+**核心概念**:
+- QEMU: QOM对象模型、AddressSpace/MemoryRegion内存管理、TCG CPU执行、BDS图结构、VMState迁移
+- Linux: VFS RCU路径查找、CFS红黑树调度、SLUB sheaf/cmpxchg16b、Buddy分配器、cgroups CSS机制
+- OS: 进程vs线程开销、虚拟内存/页表、select/poll/epoll对比
+
+## [2026-05-20] ingest | relay-neuron-supplements (curcumin + CoQ10)
+
+
+## [2026-05-20] ingest | notes/kernel (mm/sched/block subsystems)
+
+**来源**: raw/github/notes/kernel/ — Linux 内核子系统索引
+**操作**:
+- 创建 12 个 MM/Sched/Block entity 页面
+- 创建 1 个 source 导航页面: github-sphinxes0o0-notes-kernel
+- 更新 wiki/index.md
+
+**Entity 页面**:
+- MM: linux-kernel-mm-slab-allocator, mm-page-fault, mm-swap, mm-page-reclaim, mm-mmap
+- Sched: linux-kernel-sched-core, sched-cfs, sched-context-switch, sched-load-balance
+- Block: linux-kernel-block-core, block-mq, block-scheduler
+
+**核心概念**:
+- MM: SLUB sheaf/barn, 缺页中断 do_page_fault, swap_cache XA tree, kswapd/Multi-Gen LRU, mmap VMA/Maple Tree
+- Sched: CFS vruntime/EEVDF, __schedule/context_switch, sched_domain load_balance
+- Block: bio/request/gendisk, blk-mq hctx/tags, mq-deadline/BFQ elevator
+
+
+
+**来源**: raw/github/relay-neuron/research/supplements/ (姜黄素~20篇/7类 + 辅酶Q10~10篇/5类)
+
+**操作**:
+- 创建 7 个 curcumin entity 页面: curcumin-overview, curcumin-diabetes, curcumin-liver, curcumin-inflammation, curcumin-neuro, curcumin-kidney, curcumin-bioavailability
+- 创建 5 个 CoQ10 entity 页面: coq10-overview, coq10-cardiovascular, coq10-neuro, coq10-statin-myopathy, coq10-bioavailability
+- 创建 1 个 source 页面: github-relay-neuron-supplements
+- 更新 wiki/index.md
+
+**核心概念**:
+- 姜黄素: NF-κB/Nrf2/AMPK/PI3K多靶点; 糖尿病GSK-3β↓/IAPP↓(RCT n=272); MAFLD ALT↓5.6/AST↓3.9 IU/L(荟萃); 纳米递送是生物利用度瓶颈
+- 辅酶Q10: 线粒体电子传递链核心组分; 心衰Q-SYMBIO死亡率↓(强RCT); 他汀肌病绕过甲羟戊酸通路; 泛醇vs泛醌，老人/患者选泛醇
+## [2026-05-20] ingest | notes/datastructure + design_patterns + interview
+
+**来源**: raw/github/notes/datastructure/ (21 .md), raw/github/notes/design_patterns/ (26 .md), raw/github/notes/interview/ (9 .md)
+
+**操作**:
+- 创建 7 个 datastructure entity 页面: algorithm-complexity, linear-data-structures, sorting-algorithms, dynamic-programming, recursion-and-divide-conquer, hash-table, trees-and-graphs
+- 创建 5 个 design-patterns entity 页面: solid-principles, design-principles-advanced, creational-patterns, structural-patterns, behavioral-patterns
+- 创建 3 个 interview entity 页面: interview-preparation, problem-solving-patterns, system-design-basics
+- 更新 wiki/index.md
+
+**核心概念**:
+- Data Structure: 复杂度分析(O/n/log/n/n²), 线性表(数组/链表/栈/队列), 排序(冒泡/插入/归并/快排), DP(状态转移方程/最优子结构), 递归分治, 哈希表, 树图
+- Design Patterns: SOLID五大原则, DIP/SoC进阶原则, 创建型(单例/工厂/建造者/原型), 结构型(适配器/桥接/组合/装饰/门面/享元/代理), 行为型(策略/状态/观察者/命令/模板/责任链)
+- Interview: 边学边练方法论, 解题四步法, 系统设计CAP/一致性哈希
+
+**交叉引用**:
+- datastructure/algorithm-complexity → datastructure/sorting-algorithms → datastructure/dynamic-programming
+- design-patterns/solid-principles → design-patterns/design-principles-advanced → design-patterns/creational-patterns
+- interview/problem-solving-patterns → datastructure/* (DP/BFS/DFS模式)
+
+## [2026-05-20] ingest | notes + relay-neuron 批量 (6x Claude Code concurrent)
+
+- virt+io_uring+vfs: 4 entity pages (KVM, Virtio, io_uring, VFS)
+- net+netfilter+network: 3 entity + 3 source pages
+- ccpp+sys+midware+tools+security: 4 entity pages
+- relay-neuron 剩余: 14 entity pages (nutrition, running, biomechanics, training)
+- 总计新增 ~30 entity pages
+- Wiki 当前 entity pages: 95
+
+## [2026-05-20] ingest | notes/os_fundamentals + network_fundamentals + kernel subsystems
+
+**来源**: raw/github/notes/os_fundamentals/ (39 lectures), raw/github/notes/network_fundamentals/ (21 lectures), raw/github/notes/crypto|locking|ipc|rcu|time|sound/linux_kernel/
+
+**操作**:
+- 创建 2 个 synthesis 页面: topic-os-fundamentals, topic-network-fundamentals
+- 创建 6 个 kernel entity 页面: crypto-core, locking-core, ipc-core, rcu-core, time-core, sound-core
+- 创建 8 个 source 页面: notes/os_fundamentals, notes/network_fundamentals, notes/kernel/{crypto,locking,ipc,rcu,time,sound}
+- 更新 wiki/index.md
+
+**Entity 页面**:
+- Crypto: crypto_alg注册、skcipher同步加密、aead异步加密、模板机制
+- Locking: spinlock忙等待、mutex乐观自旋MCS、rwsem读写分离、percpu、lockdep
+- IPC: msg消息队列pipelined_send、sem信号量atomic_op+undo、shm共享内存mmap、mqueue红黑树
+- RCU: Read-Copy-Update无锁读取、grace period宽限期、srcu、NOCB
+- Time: tick周期中断、NO_HZ Dynamic Tick、hrtimer红黑树纳秒精度、timekeeping、NTP
+- Sound: ALSA架构、PCM DMA、ASoC三层架构、DAPM widget power、DAl数字音频接口
+
+**Synthesis 核心概念**:
+- OS: 图灵机/计算理论、进程vs线程开销、虚拟内存/页表、epoll红黑树、TCP三次握手四次挥手
+- Network: TCP/IP五层模型、滑动窗口、epoll vs select/poll、HTTP缓存、DNS解析
