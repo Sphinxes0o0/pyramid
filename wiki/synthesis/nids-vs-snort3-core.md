@@ -9,13 +9,13 @@ sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-resea
 
 ## 概述
 
-| 维度 | 本 NIDS | Snort3 |
-|------|---------|--------|
-| 架构风格 | 双线程 pipeline（Capture + Worker） | 多线程 + Inspector 插件链 |
-| 语言 | C++17 | C++ |
-| 规则兼容 | Snort3 文本规则子集 | Snort3 原生 |
-| 内容匹配 | Aho-Corasick（Phase 2 计划升级 Hyperscan） | Hyperscan（SIMD）|
-| 热重载 | shared_ptr 快照原子替换 | 原子替换 thread-local config |
+| 维度   | 本 NIDS                               | Snort3                   |
+| ---- | ------------------------------------ | ------------------------ |
+| 架构风格 | 双线程 pipeline（Capture + Worker）       | 多线程 + Inspector 插件链      |
+| 语言   | C++17                                | C++                      |
+| 规则兼容 | Snort3 文本规则子集                        | Snort3 原生                |
+| 内容匹配 | Aho-Corasick（Phase 2 计划升级 Hyperscan） | Hyperscan（SIMD）          |
+| 热重载  | shared_ptr 快照原子替换                    | 原子替换 thread-local config |
 
 ---
 
@@ -38,19 +38,19 @@ sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-resea
 
 ### 1.2 协议支持矩阵
 
-| 协议 | 本 NIDS | Snort3 |
-|------|---------|--------|
-| Ethernet | ✅ | ✅ |
-| VLAN | ✅ | ✅ |
-| IPv4 | ✅ | ✅ |
-| IPv6 | ❌ | ✅ |
-| TCP（含 Options）| ✅ 完整解析 | ✅ 基础解析 |
-| UDP | ✅ | ✅ |
-| ICMP | ✅ | ✅ |
-| ARP | ✅ | ✅ |
-| SCTP/DCCP | ❌ | ✅ |
-| 应用层（HTTP/DNS/TLS）| ❌ | ✅（Inspector 插件）|
-| 分片重组 | ❌ | ✅ stream5 |
+| 协议                | 本 NIDS | Snort3          |
+| ----------------- | ------ | --------------- |
+| Ethernet          | ✅      | ✅               |
+| VLAN              | ✅      | ✅               |
+| IPv4              | ✅      | ✅               |
+| IPv6              | ❌      | ✅               |
+| TCP（含 Options）    | ✅ 完整解析 | ✅ 基础解析          |
+| UDP               | ✅      | ✅               |
+| ICMP              | ✅      | ✅               |
+| ARP               | ✅      | ✅               |
+| SCTP/DCCP         | ❌      | ✅               |
+| 应用层（HTTP/DNS/TLS） | ❌      | ✅（Inspector 插件） |
+| 分片重组              | ❌      | ✅ stream5       |
 
 ### 1.3 扩展性对比
 
@@ -188,13 +188,13 @@ sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-resea
 
 ### 3.4 OTN vs RuleSet 架构对比
 
-| 维度 | 本 NIDS `RuleSet` | Snort3 OTN |
-|------|-------------------|------------|
-| 索引维度 | 单一维度（proto + dst_port/icmp_type）| 多维（port × proto × addr × ...）|
-| 查找复杂度 | O(log n) 二分查找 | O(1) 多维树查找 |
-| 规则分组 | 5 个固定分发表（tcp/udp/icmp/ip/any）| 动态 OTN 树 |
-| 内存布局 | `std::vector<uint32_t>` 规则索引列表 | 高度优化的静态树 |
-| 扩展性 | 固定协议分发表 | 可扩展多维索引 |
+| 维度    | 本 NIDS `RuleSet`                 | Snort3 OTN                    |
+| ----- | -------------------------------- | ----------------------------- |
+| 索引维度  | 单一维度（proto + dst_port/icmp_type） | 多维（port × proto × addr × ...） |
+| 查找复杂度 | O(log n) 二分查找                    | O(1) 多维树查找                    |
+| 规则分组  | 5 个固定分发表（tcp/udp/icmp/ip/any）    | 动态 OTN 树                      |
+| 内存布局  | `std::vector<uint32_t>` 规则索引列表   | 高度优化的静态树                      |
+| 扩展性   | 固定协议分发表                          | 可扩展多维索引                       |
 
 ### 3.5 差距分析
 
