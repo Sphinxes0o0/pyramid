@@ -1104,5 +1104,91 @@ class PerfMonitor : public Inspector {
 
 ---
 
+## 可视化
+
+### 1. Packet Processing Pipeline
+
+```mermaid
+flowchart LR
+    subgraph DAQ["[1] DAQ"]
+        A["sfdaq_recv()"]
+    end
+    subgraph Codec["[2] Codec"]
+        B["decode()"]
+    end
+    subgraph Stream5["[3] Stream5"]
+        C["reassemble()"]
+    end
+    subgraph Binder["[4] Binder"]
+        D["select_inspector()"]
+    end
+    subgraph Inspector["[5] Inspector"]
+        E["eval(Packet*)"]
+    end
+    subgraph Detection["[6] Detection"]
+        F["detect(Packet*)"]
+    end
+    subgraph Logger["[7] Logger"]
+        G["call_loggers()"]
+    end
+
+    A --> B --> C --> D --> E --> F --> G
+```
+
+### 2. Plugin Architecture (6类)
+
+```mermaid
+flowchart TD
+    subgraph Plugins["SNORT3 PLUGIN TYPES"]
+        direction TB
+        Inspector["Inspector<br/>11 types: IT_SERVICE/IT_STREAM/IT_NETWORK/..."]
+        Codec["Codec<br/>协议解码器"]
+        IpsOption["IpsOption<br/>规则关键字: content/pcre/flowbits"]
+        Logger["Logger<br/>输出插件: alert_syslog/unified2/CSV"]
+        Action["Action<br/>IPS动作: alert/drop/block/reject/pass"]
+        Mpse["Mpse<br/>模式匹配: Hyperscan/AC/ACF/BNFA"]
+    end
+
+    subgraph APIs["API结构"]
+        InspectApi["InspectApi<br/>type/ctor/ssn/eval"]
+        CodecApi["CodecApi<br/>pinit/pterm/decode/encode"]
+        IpsApi["IpsApi<br/>hash/equal/eval/action"]
+        LoggerApi["LoggerApi<br/>open/close/log/alerts"]
+        ActionApi["ActionApi<br/>priority/exec/drops"]
+        MpseApi["MpseApi<br/>add_pattern/prep_patterns/search"]
+    end
+
+    Inspector --> InspectApi
+    Codec --> CodecApi
+    IpsOption --> IpsApi
+    Logger --> LoggerApi
+    Action --> ActionApi
+    Mpse --> MpseApi
+```
+
+### 3. Fast Pattern Detection Flow
+
+```mermaid
+flowchart TB
+    A["Packet Data"] --> B["fp_local<br/>RuleGroup"]
+
+    B --> C["MpseStash<br/>批量匹配结果"]
+    C --> D["rule_tree_match<br/>规则树匹配"]
+
+    D --> E{"flowbit<br/>check?"}
+    E -->|Yes| F["defer queue<br/>延迟处理"]
+    E -->|No| G["queue<br/>正常处理"]
+
+    F --> H["process()<br/>批量处理"]
+    G --> H
+
+    H --> I["detection_option_tree_evaluate()<br/>选项树遍历"]
+    I --> J["fpEvalOption()<br/>IPS Option eval()"]
+    J --> K["fpLogEvent()<br/>事件日志"]
+
+    K --> L["Event Queue"]
+    L --> M["Logger"]
+```
+
 *文档版本: 2026.05*
 *Snort3 源码版本: 3.x (基于 ~/workspace/github/snort3/)*

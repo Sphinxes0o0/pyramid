@@ -426,3 +426,80 @@ nics:
 - GID 106：源速率异常（ICMP Echo Rate，by_src）
 - GID 107：服务端口扫描（FTP/SSH exact port）
 - SID 全部位于私有段 `1_xxx_xxx`（AttemptedDos）和 `2_xxx_xxx`（NetworkScan）
+
+---
+
+## 可视化
+
+### 1. NIDS 双线程 Pipeline
+
+```mermaid
+flowchart TB
+    NIC["NIC"]
+
+    subgraph Frontend["Frontend (CaptureThread)"]
+        Pcap["PcapSource<br/>libpcap 回调"]
+        Preprocess["Preprocess<br/>L2解析: EtherType/VLAN"]
+        QueueWrite["QueueWrite<br/>SPSC 入队"]
+    end
+
+    subgraph Backend["Backend (WorkerThread)"]
+        QueueRead["QueueRead<br/>SPSC 出队"]
+        Decoder["ProtocolDecoder<br/>L3/L4 解析: IPv4/IPv6/TCP/UDP/ICMP"]
+        Detection["DetectionEngine<br/>规则匹配 + PortScan检测"]
+        Event["EventEngine<br/>事件标准化/限流/SOA上报"]
+    end
+
+    subgraph Pool["PacketPool"]
+        Small["Small Slot (256B)"]
+        Std["Std Slot (2KB)"]
+        Large["Large Slot (16KB)"]
+    end
+
+    NIC --> Pcap
+    Pcap --> Preprocess
+    Preprocess --> QueueWrite
+    QueueWrite -->|SPSC Queue| QueueRead
+    QueueRead --> Decoder
+
+    Decoder -->|Early Release<br/>Small/Std| Pool
+    Decoder --> Detection
+    Detection --> Event
+    Event -->|Release Large| Pool
+
+    Pool --> QueueWrite
+    Pool --> QueueRead
+```
+
+### 2. DetectionEngine 内部检测流程
+
+```mermaid
+flowchart TB
+    A["DecodeResult<br/>L3/L4 元数据"] --> B["proto_mask_<br/>协议级快速拒绝"]
+
+    B --> C["PortGroupIndex 查找<br/>O(log N) 二分查找端口组<br/>构建候选集"]
+
+    C --> D["FastSelector 预筛<br/>协议/端口头匹配"]
+
+    D --> E["OptionChain 求值<br/>按成本排序顺序求值<br/>任意失败即短路"]
+
+    E --> F["ContentMatcher<br/>AC automaton<br/>一次遍历匹配所有pattern"]
+
+    F --> G["DetectionFilter<br/>阈值门控 limit/both/threshold"]
+
+    G --> H["PortScanInspector<br/>5张哈希表 + Bloom filter<br/>行为级扫描检测"]
+
+    H --> I["EventEngine<br/>event_type推导<br/>SOA JSON上报 + NLog"]
+```
+
+### 3. HealthMonitor 健康状态机
+
+```mermaid
+stateDiagram-v2
+    [*] --> Running
+    Running --> Paused: CPU ≥ 30% OR MEM ≥ 80MB<br/>持续 5s
+    Paused --> Running: CPU < 16% AND MEM < 56MB<br/>cooldown 10s
+
+    note right of Paused: 滞后区间防止频繁振荡
+    note left of Running: HealthMonitor 自动降级<br/>Capture::StopNic/StartNic 控制
+```

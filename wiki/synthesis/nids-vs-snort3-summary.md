@@ -232,3 +232,119 @@ NIDS 是面向车载 NIC 的嵌入式 L3/L4 网络入侵检测系统，定位为
 | `nids-vs-snort3-event.md` | Event/Alert / Logger 插件 / 阈值机制 |
 | `nids-vs-snort3-ops.md` | 健康监控 / 配置热重载 / 模块系统 |
 | `nids-vs-snort3-infra.md` | 架构定位 / 运维对比 / 综合热力图 |
+
+---
+
+## 可视化
+
+### 1. 差距热力图
+
+```mermaid
+flowchart LR
+    subgraph Dimensions["维度"]
+        C["capture"]
+        D["decode"]
+        De["detect"]
+        R["rules"]
+        P["pipeline"]
+        E["event"]
+        O["ops"]
+        H["health"]
+    end
+
+    subgraph Scores["评分"]
+        FU["功能完整度"]
+        PE["性能"]
+        EX["可扩展性"]
+        EM["嵌入式适配"]
+    end
+
+    Dimensions -->|capture| CF1["🔴"]
+    Dimensions -->|decode| CF2["🔴"]
+    Dimensions -->|detect| CF3["🔴"]
+    Dimensions -->|rules| CF4["🟡"]
+    Dimensions -->|pipeline| CF5["🟡"]
+    Dimensions -->|event| CF6["🟡"]
+    Dimensions -->|ops| CF7["🟡"]
+    Dimensions -->|health| CF8["🟢"]
+
+    note "🔴 = NIDS 劣势<br/>🟡 = 中等差距<br/>🟢 = NIDS 优势"
+```
+
+### 2. Phase 行动路线图
+
+```mermaid
+flowchart TB
+    subgraph Phase1["Phase 1: 补齐生产路径 (0-3个月)"]
+        P1A["alert_policy 集成生产<br/>解除告警风暴风险"]
+        P1B["Runtime 三层拆分<br/>NicRuntimeUnit / PipelineDirector / DegradeController"]
+        P1C["多输出通道<br/>alert_csv / alert_syslog"]
+        P1D["HealthMonitor 完善<br/>5s 防抖 + 10s 冷却"]
+    end
+
+    subgraph Phase2["Phase 2: 缩小功能差距 (3-9个月)"]
+        P2A["flowbits 状态机<br/>多步骤攻击链检测"]
+        P2B["PCRE 正则支持<br/>pcre2 库"]
+        P2C["Intel Hyperscan 升级<br/>SIMD 向量化 5万+规则"]
+        P2D["IPv6 解码支持<br/>固定头 + Extension"]
+        P2E["配置热重载<br/>atomic config pointer"]
+    end
+
+    subgraph Phase3["Phase 3: 架构演进 (9-18个月)"]
+        P3A["stream5 分片重组<br/>IP分片 + TCP流重组"]
+        P3B["Inspector 基类抽象<br/>动态加载 .so 插件"]
+        P3C["OTN 多维索引<br/>大规则集优化"]
+        P3D["ET/VRT 规则库对接<br/>SID 段映射方案"]
+    end
+
+    Phase1 --> Phase2 --> Phase3
+
+    P1A -->|消除风险| P2A
+    P1B -->|架构基础| P3B
+```
+
+### 3. NIDS vs Snort3 核心定位差异
+
+```mermaid
+flowchart LR
+    subgraph NIDS["NIDS"]
+        N1["目标场景<br/>车载 NIC / 嵌入式"]
+        N2["性能目标<br/>100Mbps"]
+        N3["架构<br/>双线程 + SPSC"]
+        N4["规则生态<br/>私有 SID 段"]
+        N5["优势<br/>确定性低延迟 + 健康自愈闭环"]
+    end
+
+    subgraph Snort3["Snort3"]
+        S1["目标场景<br/>通用网络 IPS"]
+        S2["性能目标<br/>万兆"]
+        S3["架构<br/>多线程 + Inspector 插件链"]
+        S4["规则生态<br/>ET/VRT 完整兼容"]
+        S5["优势<br/>功能完整度 + 可扩展性"]
+    end
+
+    N1 -.->|各有定位| S1
+    N2 -.->|错位竞争| S2
+    N3 -.->|架构互补| S3
+    N4 -.->|生态差异| S4
+    N5 -.->|各自领先| S5
+```
+
+### 4. 关键差距 Top 5
+
+```mermaid
+flowchart TB
+    G1["#1 应用层 DPI 缺失<br/>无 HTTP/DNS/TLS 检测<br/>影响: 无法覆盖 HTTPS 主流威胁"]
+    G2["#2 内容匹配算法<br/>AC vs Hyperscan<br/>影响: 大规则集性能差距数倍"]
+    G3["#3 flowbits/PCRE 缺失<br/>无状态检测<br/>影响: 社区规则大量失效"]
+    G4["#4 分片重组缺失<br/>无 stream5<br/>影响: 无法检测分片逃避攻击"]
+    G5["#5 配置热重载缺失<br/>需重启进程<br/>影响: 高可用场景防护真空期"]
+
+    G1 --> G2 --> G3 --> G4 --> G5
+
+    style G1 fill:#f99
+    style G2 fill:#f99
+    style G3 fill:#f99
+    style G4 fill:#f99
+    style G5 fill:#f99
+```

@@ -818,3 +818,91 @@ Snort3 的 Dynamic OTN Tree 是其检测引擎的核心创新：
 6. **RTN/OTN 分离设计** 规则头体分离，便于共享和复用
 
 这套设计使得 Snort3 在保持高性能的同时，获得了 Snort2 无法实现的运行时灵活性。
+
+---
+
+## 可视化
+
+### 1. PORT_RULE_MAP 三层索引结构 (O(1) 端口查找)
+
+```mermaid
+flowchart TB
+    subgraph PORT_RULE_MAP["PORT_RULE_MAP"]
+        direction LR
+        PRM["prmTcpRTNX<br/>prmUdpRTNX<br/>prmIpRTNX<br/>prmIcmpRTNX"]
+    end
+
+    PRM -->|prmDstPort[65536]| DstPort["prmDstPort[65536]<br/>O(1) 目的端口索引<br/>RuleGroup*"]
+    PRM -->|prmSrcPort[65536]| SrcPort["prmSrcPort[65536]<br/>O(1) 源端口索引<br/>RuleGroup*"]
+    PRM -->|prmGeneric| Generic["prmGeneric<br/>任意端口规则<br/>RuleGroup*"]
+
+    DstPort -->|dst_port| RG1["RuleGroup<br/>pm_list[MPSE]<br/>nfp_tree<br/>rule_count"]
+    SrcPort -->|src_port| RG2["RuleGroup<br/>pm_list[MPSE]<br/>nfp_tree<br/>rule_count"]
+    Generic -->|any_port| RG3["RuleGroup<br/>pm_list[MPSE]<br/>nfp_tree<br/>rule_count"]
+
+    RG1 --> MPSE["MpseGroup<br/>normal_mpse<br/>offload_mpse<br/>Hyperscan/AC"]
+```
+
+### 2. RTN + OTN 关系与 Fast Pattern 搜索流程
+
+```mermaid
+flowchart TB
+    A["文本规则"] --> B["解析阶段"]
+
+    B --> C["RTN (RuleTreeNode)<br/>规则头节点<br/>sip/dip/src_port/dst_port/action"]
+    B --> D["OTN (OptTreeNode)<br/>规则体节点<br/>opt_func链表/content/pcre/flowbits"]
+
+    C -->|共享| D
+    D -->|proto_nodes| C
+
+    C --> E["PORT_RULE_MAP<br/>三层索引"]
+    E -->|O(1)查找| F["RuleGroup"]
+
+    F --> G["pm_list<br/>PatternMatcher列表"]
+    G --> H["MpseGroup<br/>normal_mpse + offload_mpse"]
+    H --> I["Hyperscan / AC<br/>Fast Pattern匹配"]
+
+    I -->|匹配成功| J["rule_tree_match"]
+    J --> K["detection_option_tree_evaluate<br/>遍历检测选项树"]
+    K --> L["fpEvalOption()<br/>IpsOption::eval()"]
+    L --> M["fpLogEvent()<br/>事件入队"]
+```
+
+### 3. OTN proto_nodes 多 Policy 索引
+
+```mermaid
+flowchart LR
+    OTN["OTN (同一条规则)"]
+
+    OTN -->|proto_nodes[policy_0]| RTN0["RTN_0<br/>Network Policy 0"]
+    OTN -->|proto_nodes[policy_1]| RTN1["RTN_1<br/>Network Policy 1"]
+    OTN -->|proto_nodes[policy_2]| RTN2["RTN_2<br/>Network Policy 2"]
+
+    RTN0 -->|共享| OTN
+    RTN1 -->|共享| OTN
+    RTN2 -->|共享| OTN
+
+    style OTN fill:#f9f,stroke:#333
+    style RTN0 fill:#bbf,stroke:#333
+    style RTN1 fill:#bbf,stroke:#333
+    style RTN2 fill:#bbf,stroke:#333
+```
+
+### 4. Snort2 静态 vs Snort3 动态规则树对比
+
+```mermaid
+flowchart LR
+    subgraph Snort2["Snort2 静态规则树"]
+        direction TB
+        R2["RTN ── OTN ── OTN ── OTN"]
+        note2["编译时构建<br/>规则加载后不可更改"]
+    end
+
+    subgraph Snort3["Snort3 动态 OTN Tree"]
+        direction TB
+        R3["PORT_RULE_MAP ── prmDstPort[80] ── RuleGroup ── MPSE + OTN"]
+        note3["运行时构建<br/>原子配置替换<br/>evalIndex 动态排序"]
+    end
+
+    Snort2 -->|演进| Snort3
+```

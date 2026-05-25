@@ -1518,3 +1518,160 @@ ethernet_input 继续处理
 | `VIRT_BRG_SUPPORT` | 可选 | hypervisor 网桥 |
 | `VNET_OVER_IPC_SUPPORT` | 可选 | VM IPC 通信 |
 | `USE_SEND_SMOOTH_QAV` | 可选 | QoS 流量整形 |
+
+---
+
+## 可视化
+
+### 1. NSv 整体架构 (seL4 + lwIP)
+
+```mermaid
+flowchart TB
+    subgraph AppLayer["Application Layer"]
+        App["App 进程<br/>iperf/ping/lwfwcfg/udpecho/net-cap/tcpdump"]
+    end
+
+    subgraph NSv["NSv — Network Server (lwIP)"]
+        direction TB
+
+        event_loop["event_loop()<br/>BSD socket 请求处理"]
+        nic_rx_thread["nic_rx_thread()<br/>NIC RX 接收"]
+        tcpip_thread["tcpip_thread()<br/>lwIP 协议栈核心处理<br/>LWIP_TCPIP_CORE_LOCKING"]
+
+        subgraph LWFW["LWFW (Lightweight Firewall)"]
+            ingress["Ingress Filter Hook<br/>ip4_input → LWIP_HOOK_IP4_INPUT"]
+            egress["Egress Filter Hook<br/>ip4_output_if → LWIP_HOOK_IP4_OUTPUT"]
+        end
+
+        subgraph lwIP["lwIP Protocol Stack"]
+            TCP["TCP<br/>tcp_in"]
+            UDP["UDP<br/>udp_in"]
+            IGMP["IGMP<br/>igmp_in"]
+            DNS["DNS"]
+        end
+
+        subgraph L2["L2 Layer"]
+            eth_input["ethernet_input()<br/>VLAN 解析"]
+            eth_output["ethernet_output()<br/>VLAN tag 插入"]
+        end
+
+        subgraph NSvVirt["NSv Virtualization"]
+            packet_mmap["packet_mmap<br/>DSPACE + ringbuf"]
+            virt_brg["VIRT_BRG<br/>hypervisor 网桥"]
+            ipcif["IPCIF<br/>VM 通信"]
+        end
+
+        subgraph DMA["DMA / elem_ring Layer"]
+            CMA["CMA (96MB)<br/>共享内存"]
+            elem_ring["elem_ring x4<br/>无锁环形缓冲区"]
+        end
+    end
+
+    subgraph seL4["seL4 Microkernel"]
+        IPC["seL4 IPC<br/>badge = pid"]
+        DSpace["Dspace<br/>跨进程共享内存"]
+    end
+
+    subgraph NIC_Driver["NIC Driver (PFE/VIRTIO)"]
+        DMA_NIC["DMA 收包"]
+        IRQ["Interrupts"]
+    end
+
+    App -->|seL4 IPC| event_loop
+    event_loop --> TCP
+    event_loop --> UDP
+
+    nic_rx_thread -->|sel4_signal| seL4
+    seL4 -->|seL4_Recv| nic_rx_thread
+    nic_rx_thread --> elem_ring
+    elem_ring --> CMA
+
+    tcpip_thread --> LWFW
+    LWFW --> TCP
+    LWFW --> UDP
+
+    TCP --> eth_output
+    UDP --> eth_output
+    eth_output --> packet_mmap
+    eth_output --> DMA_NIC
+
+    DMA_NIC -->|DMA| CMA
+    CMA --> elem_ring
+    elem_ring --> nic_rx_thread
+```
+
+### 2. RX 收包完整路径
+
+```mermaid
+flowchart TB
+    subgraph NIC["NIC 驱动进程"]
+        DMA["DMA 收包到 CMA (物理地址)"]
+        ring_put["elem_ring_put<br/>used_rx_buf_ring"]
+        signal["sel4_signal<br/>nic_rx_ntfn"]
+    end
+
+    subgraph nic_rx_thread["nic_rx_thread()"]
+        recv["seL4_Recv<br/>nsv_nic_ep, &badge"]
+        ring_get["elem_ring_get<br/>used_rx_buf_ring"]
+        va_conv["cma_pa_to_va()<br/>物理→虚拟地址"]
+        lock["LOCK_TCPIP_CORE()"]
+        callback["rx_callback()<br/>pbuf*"]
+    end
+
+    subgraph ethernet_input["ethernet_input()"]
+        parse_eth["解析 Ethernet Header"]
+        vlan["VLAN 解析<br/>ETHTYPE_VLAN"]
+        filter["lwip_arp_filter_netif_fn<br/>VID → netif 分发"]
+        afpacket["raw_afpacket_input()<br/>AF-PACKET 捕获"]
+        dispatch["协议分发<br/>ip4_input / etharp_input"]
+    end
+
+    subgraph ip4_input["ip4_input()"]
+        lwfw_in["LWFW ingress_filter"]
+        proto_dispatch["TCP/UDP/ICMP/IGMP"]
+    end
+
+    DMA --> ring_put --> signal
+    signal --> recv
+    recv --> ring_get --> va_conv --> lock --> callback
+    callback --> ethernet_input
+    ethernet_input --> parse_eth --> vlan --> filter --> afpacket --> dispatch
+    dispatch --> ip4_input
+    ip4_input --> lwfw_in --> proto_dispatch
+```
+
+### 3. TCP 状态机
+
+```mermaid
+stateDiagram-v2
+    [*] --> CLOSED
+
+    CLOSED --> SYN_SENT: client send SYN
+    CLOSED --> LISTEN: server listen()
+
+    LISTEN --> SYN_RCVD:收到 SYN, 发送 SYN+ACK
+    SYN_RCVD --> ESTABLISHED: 收到 ACK
+    SYN_RCVD --> LISTEN: RST
+
+    SYN_SENT --> ESTABLISHED: 收到 SYN, 发送 ACK
+    SYN_SENT --> SYN_RCVD: 收到 SYN, 发送 SYN+ACK
+
+    ESTABLISHED --> FIN_WAIT_1: 主动发送 FIN
+    ESTABLISHED --> CLOSE_WAIT: 收到 FIN (被动关闭)
+
+    FIN_WAIT_1 --> FIN_WAIT_2: 收到 ACK
+    FIN_WAIT_1 --> CLOSING: 收到 FIN + ACK
+
+    FIN_WAIT_2 --> TIME_WAIT: 收到 FIN
+    FIN_WAIT_2 --> FIN_WAIT_1: 收到 FIN + ACK
+
+    CLOSING --> TIME_WAIT: 收到 ACK
+
+    CLOSE_WAIT --> LAST_ACK: 发送 FIN
+    LAST_ACK --> CLOSED: 收到 ACK
+
+    TIME_WAIT --> CLOSED: 2MSL 超时
+
+    note right of LISTEN: accept() 从 backlog 队列取
+    note left of CLOSE_WAIT: 仍有数据可读
+```
