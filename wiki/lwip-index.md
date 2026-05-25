@@ -2,12 +2,12 @@
 type: index
 tags: [linux, lwip, network, embedded]
 created: 2026-05-25
-sources: [safeos-lwip-core]
+sources: [safeos-lwip-core, safeos-lwip-extensions]
 ---
 
-# lwIP Core Network Protocol — Module Index
+# lwIP — Module Index
 
-> SafeOS NSv 网络栈中 lwIP 核心协议分析 (~28 篇文档)
+> SafeOS NSv 网络栈中 lwIP 协议分析 (~47 篇文档: ~28 Core + 19 Extensions)
 
 ## Entity Pages
 
@@ -18,6 +18,13 @@ sources: [safeos-lwip-core]
 | [[entities/linux/lwip/lwip-netif-add]] | netif_add 注册流程、netif_get_by_index 查找、编号分配 O(n²) |
 | [[entities/linux/lwip/lwip-ethernet-input]] | L2→L3 入口 ethernet_input、VLAN tag 解析、LWIP_ARP_FILTER_NETIF |
 | [[entities/linux/lwip/lwip-ethernet-output]] | L3→L2 封装 ethernet_output、VLAN tag 插入 (LWIP_HOOK_VLAN_SET) |
+| [[entities/linux/lwip/lwip-arp-filter-netif-fn]] | VLAN-aware netif 选择、两阶段分发、VID 精确匹配 |
+
+### Bridge / VIRT 网桥
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-bridgeif]] | 802.1D MAC Bridge 实现、FDB 学习/老化、port_input/port_output |
+| [[entities/linux/lwip/lwip-virt-brg]] | VIRT_BRG_SUPPORT 与 hypervisor 交互、ethif_link_output_overload |
 
 ### 内存管理层
 | Entity | Description |
@@ -70,9 +77,54 @@ sources: [safeos-lwip-core]
 |--------|-------------|
 | [[entities/linux/lwip/lwip-network-init]] | lwip_init → tcpip_init → netif_add → vlanif_setup 完整初始化流程 |
 
-## Source Page
+## DMA / CMA / elem_ring 基础设施
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-cma-buffer]] | CMA (Contiguous Memory Area) 缓冲区分配、pbuf 映射、DMA 共享机制 |
+| [[entities/linux/lwip/lwip-elem-ring]] | 无锁单生产者/单消费者环形缓冲区、ARM dmb/dsb 内存屏障 |
 
-- [[sources/safeos-lwip-core]] — SafeOS lwIP Core Network Protocol Analysis (28 篇汇总)
+## LWFW 防火墙
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-firewall]] | LWFW 无状态包过滤、三层安全架构 (lwfw/lwct/cBPF)、规则匹配 |
+| [[entities/linux/lwip/lwip-lwfw-filter-hooks]] | LWFW Ingress/Egress filter hooks 在 ip4_input/ip4_output 中的精确集成点 |
+
+## RAW / packet_mmap / AF-PACKET
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-raw-socket]] | RAW socket 实现、AF-PACKET 绑定、raw_pcb 管理、cBPF 过滤 |
+| [[entities/linux/lwip/lwip-packet-mmap]] | AF-PACKET mmap 实现、TPACKET_V1、ring buffer 零拷贝 |
+
+## NSv Socket API
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-nsv-event-loop]] | NSv 主事件循环、select/poll 实现、socket 事件分发、双线程模型 |
+| [[entities/linux/lwip/lwip-sys-net-socket-api]] | BSD Socket API：socket/bind/listen/accept/connect/close |
+| [[entities/linux/lwip/lwip-sys-net-send-recv]] | sys_net_sendto/recvfrom 数据传输、共享内存优化 |
+| [[entities/linux/lwip/lwip-sys-net-ctl]] | netstat/ifconfig/lwfwcfg 等控制命令 |
+
+## VNET_OVER_IPC / IPCIF
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-ipcif]] | VNET_OVER_IPC_SUPPORT、VM 通信、seL4 IPC + 共享内存 |
+
+## seL4 微内核集成
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-sel4-function]] | lwIP 在 seL4 上运行的函数级深度分析：完整调用链 |
+| [[entities/linux/lwip/lwip-sel4-interaction]] | lwIP 与 seL4 物理网卡/VLAN/Hypervisor 交互深度分析 |
+| [[entities/linux/lwip/lwip-sel4-ipc]] | seL4 notification/endpoint 通信、badge 机制、IPC 延迟 |
+| [[entities/linux/lwip/lwip-sel4-performance-boundary]] | seL4 + lwIP 性能边界分析 (~3x 单核性能损失) |
+
+## 概览
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/lwip/lwip-analysis-summary]] | SafeOS lwIP Extensions 分析文档汇总 |
+
+## Source Pages
+
+- [[sources/safeos-lwip-core]] — SafeOS lwIP Core Network Protocol Analysis (~28 篇汇总)
+- [[sources/safeos-lwip-extensions]] — SafeOS lwIP Extensions & Integration (19 篇汇总)
 
 ## Related Indexes
 

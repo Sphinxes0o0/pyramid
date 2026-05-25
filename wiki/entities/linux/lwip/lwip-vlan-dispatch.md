@@ -2,7 +2,7 @@
 type: entity
 tags: [linux, lwip, network, vlan]
 created: 2026-05-25
-sources: [safeos-lwip-core]
+sources: [safeos-lwip-extensions]
 ---
 
 # lwIP VLAN Dispatch Analysis
