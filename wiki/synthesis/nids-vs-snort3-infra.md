@@ -36,7 +36,7 @@ sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-resea
 | **插件扩展方式** | 新增 `ProtocolDecoder` 实现类 + `DecoderRegistry` 注册，不修改主干 | `InspectorManager` 统一管理，`PluginManager` 动态加载；`CodecManager` 管理编解码插件 |
 | **协议解析** | IPv4/IPv6/TCP/UDP/ICMP/ARP，DecoderCoordinator 按 ether_type/ip_proto 分发 | Codec 链（Ethernet → IP → TCP/UDP/…），支持多层嵌套，CodecManager 统一调度 |
 | **内容匹配** | Aho-Corasick automaton（Phase 2 升级 hyperscan）| hyperscan / Aho-Corasick（硬件加速 offload 接口）|
-| **TCP 处理** | 完整 TCP Options 解析（MSS/WScale/SACK），无 stream5 重组 | 无内置 stream5（分片重组由 preprocessor 负责）|
+| **TCP 处理 (stream5 inspector)** | 完整 TCP Options 解析（MSS/WScale/SACK），无 stream5 重组 | 内置 IT_STREAM stream5 inspector（分片重组由 preprocessor 负责）|
 | **分片重组** | 不支持 | stream5 preprocessor |
 | **背压/队列** | SPSC + 4阶段 CPU pause backoff（空载 CPU ~41%→≈0）；QueueStats cache-line 拆分；统计节流每64包原子更新 | 无内置 SPSC；Packet threads 各自独立 |
 | **零拷贝** | 强制：一次写入，slot 指针传递，Early Release（Small/Standard slot 解码后即归还）| 无显式零拷贝约束 |

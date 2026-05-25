@@ -231,7 +231,7 @@ NIDS **无完整插件系统**，采用注册即接入模式：
 |------|------|--------|
 | 插件类型 | 仅 Decoder 注册 | Inspector/Codec/Mpse/Logger/Action 完整体系 |
 | 插件加载 | 静态注册（编译时决定）| `PluginManager::load_plugins()` 动态加载 |
-| 检查器类型 | 无分类（单一 DetectionEngine）| 8 种 InspectorType 分类 |
+| 检查器类型 | 无分类（单一 DetectionEngine）| 11 种 InspectorType 分类 |
 | 服务检测 | ❌ 无 | ✅ 20+ ServiceInspector |
 | 流管理 | ❌ 独立 PortScanInspector | ✅ 内置 StreamInspector |
 | 扩展方式 | 新增 decoder 类 + 注册 | 完整插件 API（INSAPI_VERSION）|
