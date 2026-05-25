@@ -2,7 +2,7 @@
 type: synthesis
 tags: [nids, ids, snort3, architecture, comparison]
 created: 2026-05-25
-sources: [nids-design-docs, snort3- CLAUDE.md]
+sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-research]
 ---
 
 # NIDS vs Snort3 核心检测流水线对比

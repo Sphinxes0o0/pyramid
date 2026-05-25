@@ -2,7 +2,7 @@
 type: synthesis
 tags: [nids, snort3, packet-capture, afpacket, daq, comparison]
 created: 2026-05-25
-sources: [nids-current-architecture, safeos-packet-mmap, snort3-claude]
+sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-research]
 ---
 
 # NIDS vs Snort3 Packet Capture 模块对比

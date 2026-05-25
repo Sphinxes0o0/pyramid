@@ -2,7 +2,7 @@
 type: synthesis
 tags: [NIDS, Snort3, Event, Alert, Comparison]
 created: 2026-05-25
-sources: [event_engine.md, nids_conf.yaml, 15_event.md, 12_actions.md, 13_loggers.md]
+sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-research]
 ---
 
 # NIDS vs Snort3 Event/Alert 对比

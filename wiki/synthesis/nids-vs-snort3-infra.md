@@ -2,7 +2,7 @@
 type: synthesis
 tags: [nids, ids, snort3, architecture, comparison]
 created: 2026-05-25
-sources: [nids-design-docs, github-snort3]
+sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-research]
 ---
 
 # NIDS vs Snort3 架构与运维对比

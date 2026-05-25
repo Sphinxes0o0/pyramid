@@ -2,7 +2,7 @@
 type: synthesis
 tags: [nids, snort3, architecture, pipeline, plugin, comparison]
 created: 2026-05-25
-sources: [nids-current-architecture, snort3-architecture-analysis]
+sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-research]
 ---
 
 # NIDS vs Snort3 Pipeline/Plugin 架构对比

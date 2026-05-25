@@ -2,7 +2,7 @@
 type: synthesis
 tags: [nids, snort3, operations, health, configuration, reload]
 created: 2026-05-25
-sources: [nids-current-architecture, nids-gap-analysis-roadmap, snort3_architecture_analysis]
+sources: [nids-current-architecture, nids-gap-analysis-roadmap, dps-market-research]
 ---
 
 # NIDS vs Snort3 运维/健康/配置对比
