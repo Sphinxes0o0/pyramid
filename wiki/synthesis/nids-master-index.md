@@ -21,33 +21,33 @@ sources: [nids-current-architecture, nids-gap-analysis-roadmap, nids-evolution-p
 ### 评审材料
 | 文档 | 说明 |
 |------|------|
-| [[nids-evolution-proposal]] | 评审用正式方案：执行摘要/路线图/资源/决策点 (276行) |
-| [[nids-automotive-context]] | S32G 车规场景：512MB/5W 约束、ISO 21434 (370行) |
-| [[nids-sel4-architecture]] | seL4 部署架构：native daemon + AF_PACKET (已验证) |
+| [[synthesis/nids-evolution-proposal]] | 评审用正式方案：执行摘要/路线图/资源/决策点 (276行) |
+| [[synthesis/nids-automotive-context]] | S32G 车规场景：512MB/5W 约束、ISO 21434 (370行) |
+| [[synthesis/nids-sel4-architecture]] | seL4 部署架构：native daemon + AF_PACKET (已验证) |
 
 ### 竞品深度分析
 | 文档 | 说明 |
 |------|------|
-| [[idps-market-research]] | Snort3/Suricata/Zeek 深度对比 (623行, 7维度) |
-| [[snort3-deep-architecture]] | Snort3 独立全栈架构分析 (1101行, 7章) |
-| [[snort3-dynamic-otn-tree]] | Dynamic OTN Tree: OTN/RTN/PORT_RULE_MAP + Fast Pattern (813行) |
-| [[nids-vs-snort3-summary]] | 综合对比热力图 + Top5差距 + 3阶段路线 (234行) |
-| [[nids-vs-snort3-capture]] | 抓包模块对比: AF_PACKET vs DAQ |
-| [[nids-vs-snort3-core]] | 核心检测: Decoder + Detection + Rules |
-| [[nids-vs-snort3-infra]] | 架构运维: Pipeline + Event + Ops |
+| [[temporal/dps-market-research]] | Snort3/Suricata/Zeek 深度对比 (623行, 7维度) |
+| [[synthesis/snort3-deep-architecture]] | Snort3 独立全栈架构分析 (1101行, 7章) |
+| [[synthesis/snort3-dynamic-otn-tree]] | Dynamic OTN Tree: OTN/RTN/PORT_RULE_MAP + Fast Pattern (813行) |
+| [[synthesis/nids-vs-snort3-summary]] | 综合对比热力图 + Top5差距 + 3阶段路线 (234行) |
+| [[synthesis/nids-vs-snort3-capture]] | 抓包模块对比: AF_PACKET vs DAQ |
+| [[synthesis/nids-vs-snort3-core]] | 核心检测: Decoder + Detection + Rules |
+| [[synthesis/nids-vs-snort3-infra]] | 架构运维: Pipeline + Event + Ops |
 
 ### 差距与路线
 | 文档 | 说明 |
 |------|------|
-| [[nids-gap-analysis-roadmap]] | 差距矩阵 + 技术选型 + 优先行动项 (160行) |
-| [[nids-current-architecture]] | 当前实现：pipeline/规则/检测/数据流 (421行) |
+| [[synthesis/nids-gap-analysis-roadmap]] | 差距矩阵 + 技术选型 + 优先行动项 (160行) |
+| [[synthesis/nids-current-architecture]] | 当前实现：pipeline/规则/检测/数据流 (421行) |
 
 ### 深度集成方案
 | 文档 | 说明 |
 |------|------|
-| [[nids-lwip-deep-integration]] | 5 hook点 + 3部署方案 + 3阶段实施 (759行) |
-| [[lwip-pbuf-exposure-design]] | pbuf 零拷贝暴露：零改动 lwIP 核心方案 |
-| [[nids-defense-capability]] | NIDS+LWFW 防御闭环: 检测→阻断→联动 (生成中) |
+| [[synthesis/nids-lwip-deep-integration]] | 5 hook点 + 3部署方案 + 3阶段实施 (759行) |
+| [[synthesis/lwip-pbuf-exposure-design]] | pbuf 零拷贝暴露：零改动 lwIP 核心方案 |
+| [[synthesis/nids-defense-capability]] | NIDS+LWFW 防御闭环: 检测→阻断→联动 (生成中) |
 
 ### 源码层
 | 文档 | 说明 |
@@ -62,7 +62,7 @@ sources: [nids-current-architecture, nids-gap-analysis-roadmap, nids-evolution-p
 ### 性能分析
 | 文档 | 说明 |
 |------|------|
-| [[safeos-throughput-latency-overview]] | 全栈性能全景：延迟/吞吐/瓶颈/优化路线 |
+| [[synthesis/safeos-throughput-latency-overview]] | 全栈性能全景：延迟/吞吐/瓶颈/优化路线 |
 
 ### 外部参考
 - 飞书 NIDS 规划文档 (`TwvKwPFHziksFFky3EXcrSJlnZe`)
