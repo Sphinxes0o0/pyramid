@@ -100,6 +100,8 @@ if (rule->flags & LWFW_RULE_FLAG_CT_STATE) {
 ```
 
 ## 相关概念
+- [[entities/linux/lwip/lwip-lwfw-filter-hooks]]
+- [[entities/linux/safeos/safeos-nsv]]
 
 - [[entities/linux/lwfw/lwfw-lwct-gc-analysis]] — GC 线程与内存管理
 - [[entities/linux/lwfw/lwfw-lwct-interaction]] — LWFW 与 LWCT 交互

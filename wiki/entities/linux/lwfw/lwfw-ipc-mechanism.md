@@ -101,6 +101,7 @@ lwfw_event_fifo = (void*)vaddr;
 | 批量确认可能重复消费 | P3 | agent 重启后 get_idx 丢失 |
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-nsv]]
 
 - [[entities/linux/lwfw/lwfw-notif]] — 通知机制
 - [[entities/linux/lwfw/lwfw-agent]] — Agent 守护进程

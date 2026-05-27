@@ -95,6 +95,7 @@ event_loop() → sys_sendto_nb()
 所有 RX packet 在 `nic_rx_thread` 中获取锁后处理，TX packet 在 `tcpip_thread` 中处理，形成单线程瓶颈。
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-nsv]]
 
 - [[entities/linux/lwip/lwip-sel4-ipc]] — seL4 IPC 机制详解
 - [[entities/linux/lwip/lwip-sel4-performance-boundary]] — 性能边界分析
