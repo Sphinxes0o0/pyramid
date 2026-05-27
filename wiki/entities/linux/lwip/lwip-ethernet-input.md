@@ -81,6 +81,9 @@ Ethernet Header (14 bytes) + VLAN Tag (4 bytes)
 3. **PCP 传递**: `p->priority = vlan->prio_vid >> 13` 将 802.1Q PCP 传递到 pbuf
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-lwip-lwfw-plan]]
+- [[entities/linux/safeos/safeos-nsv]]
+- [[entities/linux/lwfw/lwfw-vlan-interception-flow]]
 
 - [[entities/linux/lwip/lwip-netif]] — netif 结构和链表管理
 - [[entities/linux/lwip/lwip-ethernet-output]] — 对应的 L3→L2 封装

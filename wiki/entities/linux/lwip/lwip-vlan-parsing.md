@@ -139,6 +139,9 @@ struct eth_vlan_hdr {
 ```
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-lwip-lwfw-plan]]
+- [[entities/linux/lwfw/lwfw-core-filtering]]
+- [[entities/linux/lwfw/lwfw-vlan-interception-flow]]
 
 - [[entities/linux/lwip/lwip-ethernet-input]] — ethernet_input 完整流程
 - [[entities/linux/lwip/lwip-vlan-hook]] — LWIP_HOOK_VLAN_CHECK 和 LWIP_HOOK_VLAN_SET

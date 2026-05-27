@@ -105,6 +105,8 @@ typedef struct lwfw_backend_engine {
 3. **事件合并 O(n²)**: `lwfw_agent` 中事件合并算法可优化
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-nsv]]
+- [[entities/linux/lwip/lwip-lwfw-filter-hooks]]
 
 - [[entities/linux/lwfw/lwfw-core-filtering]] — 核心过滤逻辑
 - [[entities/linux/lwfw/lwfw-hook-injection]] — Hook 注入点

@@ -76,6 +76,8 @@ ref > 0:  pbuf 被引用，不能释放
 - **priority**: VLAN PCP 传递
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-lwip-lwfw-plan]]
+- [[entities/linux/lwfw/lwfw-core-filtering]]
 
 - [[entities/linux/lwip/lwip-malloc]] — heap 和 pool 分配机制
 - [[entities/linux/lwip/lwip-ethernet-input]] — pbuf 在 RX 路径中的使用

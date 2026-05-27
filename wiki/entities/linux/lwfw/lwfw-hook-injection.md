@@ -107,6 +107,8 @@ printf("LWFW_TEST_LATENCY INPUT: %lu ns\n", delta_ns);
 | 状态检查 | 安全 | 调用 ops 前先检查 state == ENABLE |
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-lwip-lwfw-plan]]
+- [[entities/linux/safeos/safeos-nsv]]
 
 - [[entities/linux/lwfw/lwfw-architecture]] — 整体架构
 - [[entities/linux/lwfw/lwfw-tcpip-thread]] — 执行上下文

@@ -116,6 +116,8 @@ NORMAL ──(rx_pps >= burst)──► LIMIT ──(time >= expire)──► NO
 | L2 解析默认关闭 | P2 | VLAN/MAC 过滤默认不可用 |
 
 ## 相关概念
+- [[entities/linux/safeos/safeos-lwip-lwfw-plan]]
+- [[entities/linux/lwip/lwip-lwfw-filter-hooks]]
 
 - [[entities/linux/lwfw/lwfw-architecture]] — 引擎抽象架构
 - [[entities/linux/lwfw/lwfw-hook-injection]] — Hook 注入点
