@@ -18,6 +18,8 @@ sources: [safeos-architecture]
 | [[entities/linux/safeos/safeos-network-implementation]] | SafeOS 网络实现深度分析：CMA+DS-RING、elem_ring、收包/发包路径、协议支持、与 Linux 的本质差异 |
 | [[entities/linux/safeos/safeos-packet-mmap]] | AF-PACKET + TPACKET 抓包实现：DSPACE 布局、TPACKET 帧格式、代码核心路径、与 Linux PACKET_MMAP 的核心区别、当前限制 |
 | [[entities/linux/safeos/safeos-vdf-nids-relation]] | SafeOS 与 VDF nids 项目关系：仓库结构、适配条件、架构差异、nids 适配可行性 |
+| [[entities/linux/safeos/safeos-abi-boundary]] | ABI 边界与内部头文件暴露：packet_mmap_info 暴露问题、public/private API 分离、稳定 ABI 层设计 |
+| [[entities/linux/safeos/safeos-lwip-lwfw-plan]] | lwIP + LWFW 深度分析计划：9阶段 ~64任务、架构总览、模块分解、分析方法 |
 
 ## Source Pages
 
