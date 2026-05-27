@@ -21,11 +21,29 @@ sources: [safeos-architecture]
 | [[entities/linux/safeos/safeos-abi-boundary]] | ABI 边界与内部头文件暴露：packet_mmap_info 暴露问题、public/private API 分离、稳定 ABI 层设计 |
 | [[entities/linux/safeos/safeos-lwip-lwfw-plan]] | lwIP + LWFW 深度分析计划：9阶段 ~64任务、架构总览、模块分解、分析方法 |
 
+## New Entity Pages (Batch G2: 2026-05-27)
+
+| Entity | Description |
+|--------|-------------|
+| [[entities/linux/safeos/safeos-lwip-vlan]] | lwIP IEEE 802.1Q VLAN 实现：struct eth_vlan_hdr、netif->vlanid、PCP 优先级、LWIP_HOOK_VLAN_SET/CHECK |
+| [[entities/linux/safeos/safeos-lwip-sel4-performance-boundary]] | seL4 + lwIP 性能边界：IPC 开销 ~150-710ns/packet、tcpip_thread 单线程瓶颈、4 核仅利用 ~25% |
+| [[entities/linux/lwip/lwip-cma-elem-ring]] | CMA Buffer (96MB) 与 elem_ring 无锁队列：VA/PA 转换、DMA 共享、dmb(ish) 内存屏障 |
+| [[entities/linux/safeos/safeos-lwfw-hotswap]] | LWFW 热切换：双缓冲架构、深拷贝持锁时间、P0 热重载窗口期无防护问题 |
+
 ## Source Pages
 
+### Architecture
 - [[sources/safeos-architecture]] — SafeOS Architecture & Design Documents (7 篇汇总)
+- [[sources/safeos-plan]] — SafeOS lwIP + LWFW 深度分析计划 (9 阶段 ~64 任务)
+
+### lwIP Core
+- [[sources/safeos-lwip-analysis-summary]] — lwIP 深度分析文档汇总 (~28 Core + 19 Extensions)
+- [[sources/safeos-lwip-vlan-implementation]] — lwIP VLAN IEEE 802.1Q 实现
+- [[sources/safeos-lwip-vlan-dispatch]] — lwIP vs Linux VLAN 分发机制对比
+- [[sources/safeos-lwip-firewall-analysis]] — lwIP 防火墙实现 (lwfw/lwct/cBPF 三层)
 
 ## Related Indexes
 
 - [[lwip-index]] — lwIP 模块完整索引 (TCP/UDP/IP/netif/pbuf/VLAN)
 - [[lwfw-index]] — LWFW 防火墙模块索引 (架构/过滤/LWCT/解析/IPC/Agent/VLAN/优化)
+- [[vdf-index]] — VDF 模块索引 (evm-report/iot-gateway/oam-service/traffic-manager/data-collection)
