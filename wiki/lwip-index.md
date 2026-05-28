@@ -82,6 +82,7 @@ sources: [safeos-lwip-core, safeos-lwip-extensions]
 |--------|-------------|
 | [[entities/linux/lwip/lwip-cma-buffer]] | CMA (Contiguous Memory Area) 缓冲区分配、pbuf 映射、DMA 共享机制 |
 | [[entities/linux/lwip/lwip-elem-ring]] | 无锁单生产者/单消费者环形缓冲区、ARM dmb/dsb 内存屏障 |
+| [[entities/linux/lwip/lwip-cma-elem-ring]] | CMA (96MB) 与 elem_ring 无锁队列：VA/PA 转换、DMA 共享、dmb(ish) 内存屏障、NSv/NIC 共享 |
 
 ## LWFW 防火墙
 | Entity | Description |
