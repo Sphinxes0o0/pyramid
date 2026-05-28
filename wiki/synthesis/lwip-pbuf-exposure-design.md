@@ -1,3 +1,8 @@
+---
+type: synthesis
+tags: []
+created: 2026-05-28
+---
 # lwIP pbuf 直接暴露给 NIDS 工程方案
 
 ## 1. pbuf 流三阶段
