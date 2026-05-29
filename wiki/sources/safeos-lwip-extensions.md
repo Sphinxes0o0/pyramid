@@ -127,5 +127,5 @@ SafeOS NSv 网络栈中 lwIP 扩展模块分析，涵盖与 seL4 微内核的深
 ## 相关页面
 
 - [[sources/safeos-lwip-core]] — lwIP Core Network Protocol (~28篇)
-- [[kernel-net-index]] — Linux 内核网络子系统
-- [[kernel-protocols-index]] — 网络协议与物理层
+- [[entities/linux/kernel/index#networking]] — Linux 内核网络子系统
+- [[entities/linux/kernel/index#network-protocols--physical-layer]] — 网络协议与物理层

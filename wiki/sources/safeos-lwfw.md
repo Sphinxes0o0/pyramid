@@ -43,4 +43,4 @@ LWFW (Lightweight Firewall) 是 SafeOS lwIP 网络栈中的**状态ful 防火墙
 
 - [[lwfw-index]] — LWFW 模块索引
 - [[entities/linux/lwip/lwip-tcpip-thread]] — 过滤执行上下文
-- [[kernel-net-index]] — Linux 内核网络子系统
+- [[entities/linux/kernel/index#networking]] — Linux 内核网络子系统

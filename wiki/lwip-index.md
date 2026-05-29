@@ -129,5 +129,5 @@ sources: [safeos-lwip-core, safeos-lwip-extensions]
 
 ## Related Indexes
 
-- [[kernel-net-index]] — Linux 内核网络子系统 (Socket/sk_buff、Netfilter)
-- [[kernel-protocols-index]] — 网络协议与物理层 (TCP/IP、PHY/MAC)
+- [[entities/linux/kernel/index#networking]] — Linux 内核网络子系统 (Socket/sk_buff、Netfilter)
+- [[entities/linux/kernel/index#network-protocols--physical-layer]] — 网络协议与物理层 (TCP/IP、PHY/MAC)

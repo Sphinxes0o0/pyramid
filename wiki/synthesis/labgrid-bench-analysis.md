@@ -276,3 +276,9 @@ Labgrid is a well-designed, production-tested framework that could replace the p
 The nuccli lock-file reservation is simpler but less capable than labgrid's coordinator. If multi-user scheduling with priorities/tags is needed, coordinator is worth the migration cost. If simple lock-based reservation suffices, ExternalPowerDriver + SSHDriver may be enough without full coordinator deployment.
 
 **Recommendation:** Start with Phase 1 (ExternalPowerDriver) to validate labgrid behavior with existing hardware, then decide on full migration based on results.
+
+---
+
+## 扩展阅读
+
+本文侧重 bench management 场景。关于车载多 ECU 场景的深度分析（Hierarchical Place、Resource Domain、VehicleStrategy），参见 [[wiki/sources/chatgpt-labgrid-analysis]] 和 [[wiki/synthesis/labgrid-automotive-scenario]]。

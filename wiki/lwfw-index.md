@@ -86,4 +86,4 @@ sources: [safeos-lwfw]
 ## Related Indexes
 
 - [[lwip-index]] — lwIP 嵌入式协议栈 (LWFW 依赖 lwIP)
-- [[kernel-net-index]] — Linux 内核网络子系统
+- [[entities/linux/kernel/index#networking]] — Linux 内核网络子系统
